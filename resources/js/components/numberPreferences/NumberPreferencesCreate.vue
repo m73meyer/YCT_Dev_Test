@@ -2,24 +2,28 @@
     <div class="mt-2 mb-6 text-sm text-red-600" v-if="errors !== ''">
         {{ errors }}
     </div>
-    <form class="space-y-6" @submit.prevent="saveNumber">
+    <div> 
+        Customer: {{customer.name}}
+    </div>
+    <div> 
+        Number: {{number.number}}
+    </div>
+    <form class="space-y-6" @submit.prevent="saveNumberPreference">
         <div class="space-y-4 rounded-md shadow-sm">
             <div>
-                <label for="number" class="block text-sm font-medium text-gray-700">Number</label>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <div class="mt-1">
-                    <input type="text" name="number" id="number"
+                    <input type="text" name="name" id="name"
                            class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                           v-model="form.number">
+                           v-model="form.name">
                 </div>
             </div>
             <div>
-                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <label for="value" class="block text-sm font-medium text-gray-700">Value</label>
                 <div class="mt-1">
-                    <select class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="status" id="status" v-model="form.status">
-                        <option value="active">active</option>
-                        <option value="inactive">inactive</option>
-                        <option value="cancelled">cancelled</option>
-                    </select>
+                    <input type="text" name="value" id="value"
+                           class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           v-model="form.value">
                 </div>
             </div>
         </div>
@@ -32,36 +36,50 @@
     </form>
 </template>
 <script>
-import { reactive } from "vue";
-import useNumbers from '../../composables/numbers';
+import { reactive, onMounted } from "vue";
+import useNumbers from "../../composables/numbers";
+import useCustomers from "../../composables/customers";
+import useNumberPreferences from "../../composables/numberPreferences";
 
 export default {
     props: {
         idCustomer: {
             required: true,
             type: String
+        },
+        idNumber: {
+            required: true,
+            type: String
         }
+
     },
     setup(props) {
         const form = reactive({
-            'id_customer': '',
-            'number': '',
-            'status': '',
+            'name': '',
+            'value': ''
         })
 
-        const { errors, storeNumber } = useNumbers()
+        const { errors, numberPreferences, getNumberPreferences, storeNumberPreference } = useNumberPreferences()
+        const { number, getNumber } = useNumbers()
+        const { customer, getCustomer } = useCustomers()
+        
+        onMounted(() => {
+            getNumber(props.idCustomer, props.idNumber)
+            getCustomer(props.idCustomer)
+            getNumberPreferences(props.idCustomer, props.idNumber);
+        })
 
-        const saveNumber = async () => {
-            await storeNumber(props.idCustomer, {...form});
+
+        const saveNumberPreference = async () => {
+            await storeNumberPreference(props.idCustomer, props.idNumber, {...form});
         }
 
-        let idCustomer = props.idCustomer;
-
         return {
-            idCustomer,
+            customer,
+            number,
             form,
             errors,
-            saveNumber
+            saveNumberPreference
         }
     }
 }

@@ -2,24 +2,28 @@
     <div class="mt-2 mb-6 text-sm text-red-600" v-if="errors !== ''">
         {{ errors }}
     </div>
-    <form class="space-y-6" v-on:submit.prevent="saveNumber">
+    <div> 
+        Customer: {{customer.name}}
+    </div>
+    <div> 
+        Number: {{number.number}}
+    </div>
+    <form class="space-y-6" v-on:submit.prevent="saveNumberPreference">
         <div class="space-y-4 rounded-md shadow-sm">
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Number</label>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <div class="mt-1">
-                    <input type="text" name="number.number" id="number.number"
+                    <input type="text" name="name" id="name"
                            class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                           v-model="number.number">
+                           v-model="numberPreference.name">
                 </div>
             </div>
             <div>
-                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <label for="value" class="block text-sm font-medium text-gray-700">Value</label>
                 <div class="mt-1">
-                    <select class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" v-model="number.status">
-                        <option value="active">active</option>
-                        <option value="inactive">inactive</option>
-                        <option value="cancelled">cancelled</option>
-                    </select>
+                    <input type="text" name="value" id="value"
+                           class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                           v-model="numberPreference.value">
                 </div>
             </div>
         </div>
@@ -33,11 +37,17 @@
 <script>
 
     import useNumbers from "../../composables/numbers";
+    import useCustomers from "../../composables/customers";
+    import useNumberPreferences from "../../composables/numberPreferences";
     import { onMounted } from "vue";
 
-    export default {
+    export default { 
         props: {
             idCustomer: {
+                required: true,
+                type: String
+            },
+            idNumber: {
                 required: true,
                 type: String
             },
@@ -45,22 +55,35 @@
                 required: true,
                 type: String
             }
+
         },
         setup(props) {
 
-            const { errors, number, getNumber, updateNumber } = useNumbers()
+            const { errors, numberPreference, getNumberPreference, updateNumberPreference } = useNumberPreferences()
+            const { number, getNumber } = useNumbers()
+            const { customer, getCustomer } = useCustomers()
+           
+            onMounted(() => {
+                getNumber(props.idCustomer, props.idNumber)
+                getCustomer(props.idCustomer)
+                getNumberPreference(props.idCustomer, props.idNumber, props.id)
+            })
 
-            onMounted(getNumber(props.idCustomer, props.id))
-
-            const saveNumber = async () => {
-                await updateNumber(props.idCustomer, props.id)
+            const saveNumberPreference = async () => {
+                await updateNumberPreference(props.idCustomer, props.idNumber, props.id)
             }
 
-            return {
+            let idCustomer = props.idCustomer
+            let idNumber   = props.idNumber
+
+            return { 
                 errors,
+                numberPreference,
                 number,
-                saveNumber
+                customer,
+                saveNumberPreference
             }
+
         }
     }
 </script>

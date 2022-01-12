@@ -6,6 +6,9 @@ import CustomersEdit from '../components/customers/CustomersEdit';
 import NumbersIndex from '../components/numbers/NumbersIndex';
 import NumbersCreate from '../components/numbers/NumbersCreate';
 import NumbersEdit from '../components/numbers/NumbersEdit';
+import NumberPreferencesIndex from '../components/numberPreferences/NumberPreferencesIndex';
+import NumberPreferencesCreate from '../components/numberPreferences/NumberPreferencesCreate';
+import NumberPreferencesEdit from '../components/numberPreferences/NumberPreferencesEdit';
 
 const routes = [
     {
@@ -40,6 +43,24 @@ const routes = [
         path: '/customer/:idCustomer/numbers/:id/edit',
         name: 'numbers.edit',
         component: NumbersEdit,
+        props: true
+    },
+    {
+        path: '/customer/:idCustomer/number/:idNumber/preferences',
+        name: 'numberPreferences.index',
+        component: NumberPreferencesIndex,
+        props: true
+    },
+    {
+        path: '/customer/:idCustomer/number/:idNumber/preferences/create',
+        name: 'numberPreferences.create',
+        component: NumberPreferencesCreate,
+        props: true
+    },
+    {
+        path: '/customer/:idCustomer/number/:idNumber/preference/:id/edit',
+        name: 'numberPreferences.edit',
+        component: NumberPreferencesEdit,
         props: true
     }
 ]
