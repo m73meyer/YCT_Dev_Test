@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import CustomersIndex from '../components/customers/CustomersIndex';
 import CustomersCreate from '../components/customers/CustomersCreate';
 import CustomersEdit from '../components/customers/CustomersEdit';
+import NumbersIndex from '../components/numbers/NumbersIndex';
+import NumbersCreate from '../components/numbers/NumbersCreate';
+import NumbersEdit from '../components/numbers/NumbersEdit';
 
 const routes = [
     {
@@ -22,9 +25,22 @@ const routes = [
         props: true
     },
     {
-        path: '/customers/numbers',
-        name: 'customers.numbers',
-        component: NumbersIndex
+        path: '/customer/:idCustomer/numbers',
+        name: 'numbers.index',
+        component: NumbersIndex,
+        props: true
+    },
+    {
+        path: '/customer/:idCustomer/numbers/create',
+        name: 'numbers.create',
+        component: NumbersCreate,
+        props: true
+    },
+    {
+        path: '/customer/:idCustomer/numbers/:id/edit',
+        name: 'numbers.edit',
+        component: NumbersEdit,
+        props: true
     }
 ]
 

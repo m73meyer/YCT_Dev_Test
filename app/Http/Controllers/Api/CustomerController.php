@@ -34,9 +34,11 @@ class CustomerController extends Controller
      */
     public function store(CustomerRequest $request)
     {
+
         $customer = Customer::create($request->validated());
 
         return new CustomerResource($customer);
+
     }
 
     /**
@@ -61,7 +63,7 @@ class CustomerController extends Controller
     public function update(CustomerRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
-        return $customer;
+        return new CustomerResource($customer);
     }
 
     /**
