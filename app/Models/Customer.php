@@ -15,12 +15,14 @@ class Customer extends Model
 
     protected $fillable = ['user_id', 'name', 'document', 'status'];
 
-    protected static function boot()
+    public function numbers()
     {
-        parent::boot();
-        Customer::creating(function ($model) {
-            $model->user_id = Auth::id();
-        });
-    }    
+        return $this->hasMany(Number::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
 }
