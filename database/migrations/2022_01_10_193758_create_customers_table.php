@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\User;
 
 class CreateCustomersTable extends Migration
 {
@@ -16,7 +15,7 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('name');
             $table->string('document', 12);
             $table->enum('status', ['new', 'active', 'suspended', 'cancelled'])->default('new');

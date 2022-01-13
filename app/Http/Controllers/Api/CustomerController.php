@@ -35,7 +35,7 @@ class CustomerController extends Controller
     public function store(CustomerRequest $request)
     {
 
-        $customer = Customer::create($request->validated());
+        $customer = Customer::create(array_merge(['user_id' => Auth::id()], $request->validated()));
 
         return new CustomerResource($customer);
 

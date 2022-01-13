@@ -40,4 +40,9 @@ class Number extends Model
         return $this->hasMany(NumberPreference::class);
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
 }

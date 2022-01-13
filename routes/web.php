@@ -21,8 +21,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/customers', function () {
+    return view('customer.index');
+})->middleware(['auth'])->name('customers');
+
 require __DIR__.'/auth.php';
 
-Route::view('/{any}', 'dashboard')
+Route::view('/{any}', 'customer.index')
     ->middleware('auth')
     ->where('any', '.*');
